@@ -1,18 +1,18 @@
-//var bodyParser = require('body-parser');
-var config = require('./service-config');
 var util = require('util');
 var http=require('http');
 var querystring=require('querystring');
+var config = require('./config');
+//var bodyParser = require('body-parser');
 
 /* 
- * Do remote GET request.
+ * 处理GET请求
  */
 var proxyGet = function (req, res) {
 	doHttpRequest(req, res, 'GET');
 }
 
 /* 
- * Do remote POST request.
+ * 处理POST请求
  */
 var proxyPost = function (req, res) {
 	doHttpRequest(req, res, 'POST');
@@ -20,7 +20,7 @@ var proxyPost = function (req, res) {
 
 
 /* 
- * Do remote http process.
+ * HTTP远程调用逻辑实现
  */
 var doHttpRequest = function (req, res, method) {
 	// var path = req.path;
@@ -35,26 +35,34 @@ var doHttpRequest = function (req, res, method) {
 		body = util.inspect(req.body);
 	}
 	if (body === '{}') {
+		// 过滤空值
 		body = ''
 	}
-
+	
+	// 判断Token值
 	if (req.header('Token')) {
 		token = req.header('Token');
 	}
 	// console.log("originalUrl:", originalUrl);
 	// console.log("query:", query);
+	
+	contentType = 'application/json; charset=UTF-8';
+	if (config.remoteContentType) {
+		contentType = config.remoteContentType
+	}
+
+	// 构建HTTP调用参数
 	var options = {
-   		hostname:config.remote.serviceAddress,
-   		port:config.remote.servicePort,
-   		path:config.remote.servicePath + originalUrl,
+   		hostname:config.remoteServerAddress,
+   		port:config.remoteServerPort,
+   		path:originalUrl,
    		method:method,
    		headers:{
-   			'Content-Type':'application/json; charset=UTF-8',
+   			'Content-Type':contentType,
    			'x-forwarded-for':clientAddress,
    			'Token':token
    		}
    	}
-
 
 	var result = ''
 	var httpClient=http.request(options, function(remoteResponse) {
