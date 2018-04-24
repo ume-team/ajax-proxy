@@ -19,7 +19,7 @@ app.get(mapping, proxy.proxyGet);
 app.post(mapping, proxy.proxyPost);
  
 // 启动服务器
-var server = app.listen(config.localHttpPort, function () {
+var server = app.listen(config.localHttpPort, 'localhost', function () {
   var host = server.address().address;
   var port = server.address().port;
   console.log("Node server started on ", host, port);
