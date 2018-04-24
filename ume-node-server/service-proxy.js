@@ -49,7 +49,7 @@ var doHttpRequest = function (req, res, method) {
    		path:config.remote.servicePath + originalUrl,
    		method:method,
    		headers:{
-   			'Content-Type':config.remote.serviceContentType,
+   			'Content-Type':'application/json; charset=UTF-8',
    			'x-forwarded-for':clientAddress,
    			'Token':token
    		}
