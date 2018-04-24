@@ -1,0 +1,7 @@
+{
+ "localHttpPort":8081,
+ "localPathMapping":"/ume-quickstart-boot-uac",
+ "remoteServerAddress":"114.115.185.91",
+ "remoteServerPort": 8080
+}
+
